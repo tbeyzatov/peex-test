@@ -2,7 +2,6 @@ pipeline {
     agent {
         node {
             label 'main-node'
-            customWorkspace '/var/lib/jenkins/my-project'
         }
     }
 
