@@ -1,5 +1,10 @@
 pipeline {
-    agent any 
+    agent {
+        node {
+            label 'main-node'
+            customWorkspace '/var/lib/jenkins/my-project'
+        }
+    }
 
     stages {
        stage('Setup Dependencies') {
