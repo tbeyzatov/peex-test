@@ -5,7 +5,7 @@ pipeline {
        stage('Setup Dependencies') {
            steps {
               // Example for a Debian-based agent
-                sh 'sudo apt-get update && sudo apt-get install -y libatomic1'
+                sh 'apt-get update && sudo apt-get install -y httpd'
             }
         }
         // EXISTING STAGES (Modified for Jenkins)
