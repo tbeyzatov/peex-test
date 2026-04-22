@@ -11,7 +11,7 @@ pipeline {
         // EXISTING STAGES (Modified for Jenkins)
         stage('Build and Test') {
             steps {
-               sh 'cowsay "Build Successful!"'
+               sh '/usr/games/cowsay "Build Successful!"'
 
             }
         }
