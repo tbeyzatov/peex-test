@@ -6,16 +6,12 @@ pipeline {
     }
 
     stages {
-       stage('Setup Dependencies') {
-           steps {
-              // Example for a Debian-based agent
-                sh 'apt-get update && sudo apt-get install -y httpd'
-            }
-        }
+
+        
         // EXISTING STAGES (Modified for Jenkins)
         stage('Build and Test') {
             steps {
-               sh 'apt install cowsay'
+               sh 'cowsay "Build Successful!"'
 
             }
         }
