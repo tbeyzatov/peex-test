@@ -1,121 +1,25 @@
-# CD/CI Tutorial Sample Application ⚙ Adding a change
-
-**NOTE:** This code was written for an
-[article](https://medium.com/rockedscience/docker-ci-cd-pipeline-with-github-actions-6d4cd1731030)
-in the **RockedScience** publication on Medium.
-
-## Description
-
-This sample Python REST API application was written for a tutorial on implementing Continuous Integration and Delivery pipelines.
-
-It demonstrates how to:
-
- * Write a basic REST API using the [Flask](http://flask.pocoo.org) microframework
- * Basic database operations and migrations using the Flask wrappers around [Alembic](https://bitbucket.org/zzzeek/alembic) and [SQLAlchemy](https://www.sqlalchemy.org)
- * Write automated unit tests with [unittest](https://docs.python.org/2/library/unittest.html)
-
-Also:
-
- * How to use [GitHub Actions](https://github.com/features/actions)
-
-## Requirements
-
- * `Python 3.8`
- * `Pip`
- * `virtualenv`, or `conda`, or `miniconda`
-
-The `psycopg2` package does require `libpq-dev` and `gcc`.
-To install them (with `apt`), run:
-
-```sh
-$ sudo apt-get install libpq-dev gcc
-```
-
-## Installation
-
-With `virtualenv`:
-
-```sh
-$ python -m venv venv
-$ source venv/bin/activate
-$ pip install -r requirements.txt
-```
-
-With `conda` or `miniconda`:
-
-```sh
-$ conda env create -n ci-cd-tutorial-sample-app python=3.8
-$ source activate ci-cd-tutorial-sample-app
-$ pip install -r requirements.txt
-```
-
-Optional: set the `DATABASE_URL` environment variable to a valid SQLAlchemy connection string. Otherwise, a local SQLite database will be created.
-
-Initalize and seed the database:
-
-```sh
-$ flask db upgrade
-$ python seed.py
-```
-
-## Running tests
-
-Run:
-
-```sh
-$ python -m unittest discover
-```
-
-## Running the application
-
-### Running locally
-
-Run the application using the built-in Flask server:
-
-```sh
-$ flask run
-```
-
-### Running on a production server
-
-Run the application using `gunicorn`:
-
-```sh
-$ pip install -r requirements-server.txt
-$ gunicorn app:app
-```
-
-To set the listening address and port, run:
-
-```
-$ gunicorn app:app -b 0.0.0.0:8000
-```
-
-## Running on Docker
-
-Run:
-
-```
-$ docker build -t ci-cd-tutorial-sample-app:latest .
-$ docker run -d -p 8000:8000 ci-cd-tutorial-sample-app:latest
-```
-
-## Deploying to Heroku
-
-Run:
-
-```sh
-$ heroku create
-$ git push heroku master
-$ heroku run flask db upgrade
-$ heroku run python seed.py
-$ heroku open
-```
-
-or use the automated deploy feature:
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-
-For more information about using Python on Heroku, see these Dev Center articles:
-
- - [Python on Heroku](https://devcenter.heroku.com/categories/python)
+This document provides setup instructions and requirements for running your current Jenkins pipeline, which utilizes a specific node label and the cowsay utility.
+Pipeline Overview
+The pipeline is configured to run on a specific agent labeled main-node and executes a single stage that outputs a "Build Successful!" message using the cowsay character.
+Prerequisites
+1. Node Configuration
+The pipeline will remain in a "Pending" state unless you have an agent configured with the correct label.
+Label Required: main-node
+Verification: Go to Manage Jenkins > Nodes, select your node, and ensure main-node is listed in the Labels field.
+2. Software Requirements
+Since the pipeline calls /usr/games/cowsay, the utility must be installed on the main-node agent.
+Installation (Debian/Ubuntu):
+bash
+sudo apt-get update && sudo apt-get install -y cowsay
+Use code with caution.
+Pathing: The pipeline uses the absolute path /usr/games/cowsay to avoid "command not found" errors, as /usr/games/ is often excluded from the default system $PATH.
+Pipeline Structure
+Section	Description
+Agent	Restricts execution to the node labeled main-node.
+Stage: Build and Test	Executes the cowsay command via a shell script (sh).
+Post: Always	Prints a completion message to the console regardless of build success or failure.
+Troubleshooting
+Permission Denied: If the sh step fails with a permission error, ensure the user running the Jenkins agent has execute permissions for /usr/games/cowsay.
+Command Not Found: If the file is missing, verify the installation location using which cowsay or whereis cowsay on the agent machine.
+Offline Node: Ensure the agent labeled main-node is connected and online in the Jenkins dashboard.
+Would you like to add a failure notification to the post block to alert you if the main-node goes offline?
